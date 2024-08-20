@@ -9,8 +9,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
-import com.seda.data.helper.Helper;
+
 import com.seda.data.helper.HelperException;
+import com.seda.data.procedure.reflection.DriverType;
+import com.seda.data.procedure.reflection.ProcedureReflectorException;
 import com.seda.payer.core.bean.AbilitaCanalePagamentoTipoServizioEnte;
 import com.seda.payer.core.bean.AnagEnte;
 import com.seda.payer.core.bean.AnagProvCom;
@@ -40,6 +42,7 @@ import com.seda.payer.core.bean.TransazioneIV;
 import com.seda.payer.core.bean.TransazioneIci;
 import com.seda.payer.core.bean.User;
 import com.seda.payer.core.exception.DaoException;
+import com.seda.payer.core.handler.BaseDaoHandler;
 import com.seda.payer.core.riconciliazionemt.bean.GiornaleDiCassa;
 import com.seda.payer.core.riconciliazionemt.bean.MovimentoDiCassa;
 import com.seda.payer.svecchiamento.model.AssociazioneFlussi;
@@ -47,11 +50,13 @@ import com.seda.payer.svecchiamento.model.AssociazioneTransazioni;
 import com.seda.payer.svecchiamento.model.AssociazioneUtenteAppl;
 import com.seda.payer.svecchiamento.model.SeUser;
 
+//inizio LP 20240820 - PGNTBOLDER-1
+//public class SvecchiamentoDAO {
 
-public class SvecchiamentoDAO {
-
-	String schema;
-	Connection connection;
+//	String schema; //LP 20240820 - PGNTBOLDER-1
+//	Connection connection; //LP 20240820 - PGNTBOLDER-1
+public class SvecchiamentoDAO extends BaseDaoHandler {
+//fine LP 20240820 - PGNTBOLDER-1
 	
 	protected CallableStatement callableStatementTRAList = null;
 	protected CallableStatement callableStatementTRADel = null;
@@ -125,17 +130,22 @@ public class SvecchiamentoDAO {
 	protected CallableStatement callableStatementDropTrigger = null;
 	
 	public SvecchiamentoDAO(Connection connection, String schema) {
-		super();
-		this.connection = connection;
-		this.schema = schema;
+		//inizio LP 20240820 - PGNTBOLDER-1
+		//super();
+		//this.connection = connection;
+		//this.schema = schema;
+		super(connection, schema);
+		//fine LP 20240820 - PGNTBOLDER-1
 	}
-
 
 	public ArrayList<Company> getListSOC() throws DaoException {
 		ArrayList<Company> result = new ArrayList<Company>();
 		try {
 			if (callableStatementSOCLst == null) {
-				callableStatementSOCLst = Helper.prepareCall(connection, schema, "PYSOCSP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementSOCLst = Helper.prepareCall(connection, schema, "PYSOCSP_LST_ALL");
+				callableStatementSOCLst = prepareCall("PYSOCSP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementSOCLst.execute()) {
 				ResultSet data = callableStatementSOCLst.getResultSet();
@@ -148,17 +158,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
+
 	public ArrayList<User> getListUTE() throws DaoException {
 		ArrayList<User> result = new ArrayList<User>();	
 		try {
 			if (callableStatementUTELst == null) {
-				callableStatementUTELst = Helper.prepareCall(connection, schema, "PYUTESP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementUTELst = Helper.prepareCall(connection, schema, "PYUTESP_LST_ALL");
+				callableStatementUTELst = prepareCall("PYUTESP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementUTELst.execute()) {
 				ResultSet data = callableStatementUTELst.getResultSet();
@@ -171,16 +186,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
+
 	public ArrayList<PyUser> getListUSR() throws DaoException {
 		ArrayList<PyUser> result = new ArrayList<PyUser>();	
 		try {
 			if (callableStatementUSRLst == null) {
-				callableStatementUSRLst = Helper.prepareCall(connection, schema, "PYUSRSP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementUSRLst = Helper.prepareCall(connection, schema, "PYUSRSP_LST_ALL");
+				callableStatementUSRLst = prepareCall("PYUSRSP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementUSRLst.execute()) {
 				ResultSet data = callableStatementUSRLst.getResultSet();
@@ -193,15 +214,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
+
 	public void insertUSR(PyUser pyUser) throws DaoException, SQLException {
-		try{
+		try {
 			if (callableStatementUSRIns == null) {
-				callableStatementUSRIns = Helper.prepareCall(connection, schema, "PYUSRSP_INS2");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementUSRIns = Helper.prepareCall(connection, schema, "PYUSRSP_INS2");
+				callableStatementUSRIns = prepareCall("PYUSRSP_INS2");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementUSRIns.setLong(1, pyUser.getChiaveUtente());
 			callableStatementUSRIns.setString(2, pyUser.getUserName());
@@ -235,20 +262,26 @@ public class SvecchiamentoDAO {
 			callableStatementUSRIns.setString(30, pyUser.getFlagValidazionePec());
 			callableStatementUSRIns.registerOutParameter(31, Types.INTEGER);
 			callableStatementUSRIns.executeUpdate();
-			
 		} catch (IllegalArgumentException x) {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		}
 	}
 	
 	public void insertMNA(AssociazioneUtenteAppl associazioneUtenteAppl) throws DaoException, SQLException {
-		try{
+		try {
 			if (callableStatementMNAIns == null) {
-				callableStatementMNAIns = Helper.prepareCall(connection, schema, "PYMNASP_INS");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMNAIns = Helper.prepareCall(connection, schema, "PYMNASP_INS");
+				callableStatementMNAIns = prepareCall("PYMNASP_INS");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementMNAIns.setLong(1, associazioneUtenteAppl.getChiaveUtente());
 			callableStatementMNAIns.setString(2, associazioneUtenteAppl.getCodiceApplicazione());
@@ -259,16 +292,23 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		}
 	}
-	
+
 	public ArrayList<AssociazioneUtenteAppl> getListMNA() throws DaoException {
 		ArrayList<AssociazioneUtenteAppl> result = new ArrayList<AssociazioneUtenteAppl>();	
 		try {
 			if (callableStatementMNAList == null) {
-				callableStatementMNAList = Helper.prepareCall(connection, schema, "PYMNASP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMNAList = Helper.prepareCall(connection, schema, "PYMNASP_LST_ALL");
+				callableStatementMNAList = prepareCall("PYMNASP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementMNAList.execute()) {
 				ResultSet data = callableStatementMNAList.getResultSet();
@@ -281,15 +321,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
+
 	public void deleteMNA(AssociazioneUtenteAppl associazioneUtenteAppl) throws DaoException {
 		try	{
 			if (callableStatementMNADel == null) {
-				callableStatementMNADel = Helper.prepareCall(connection, schema, "PYMNASP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMNADel = Helper.prepareCall(connection, schema, "PYMNASP_DEL");
+				callableStatementMNADel = prepareCall("PYMNASP_DEL");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementMNADel.setLong(1, associazioneUtenteAppl.getChiaveUtente());
 			callableStatementMNADel.setString(2, associazioneUtenteAppl.getCodiceApplicazione());
@@ -298,12 +344,15 @@ public class SvecchiamentoDAO {
 			System.out.println("Eliminazione MNA: "+e.getMessage());
 		}
 	}
-	
+
 	public ArrayList<ApplProf> getListPRF() throws DaoException {
 		ArrayList<ApplProf> result = new ArrayList<ApplProf>();		
 		try {
 			if (callableStatementPRFList == null) {
-				callableStatementPRFList = Helper.prepareCall(connection, schema, "PYPRFSP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementPRFList = Helper.prepareCall(connection, schema, "PYPRFSP_LST_ALL");
+				callableStatementPRFList = prepareCall("PYPRFSP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementPRFList.execute()) {
 				ResultSet data = callableStatementPRFList.getResultSet();
@@ -316,16 +365,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
+
 	public ArrayList<AnagProvCom> getListAPC() throws DaoException {
 		ArrayList<AnagProvCom> result = new ArrayList<AnagProvCom>();
 		try {
 			if (callableStatementAPCList == null) {
-				callableStatementAPCList = Helper.prepareCall(connection, schema, "PYAPCSP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementAPCList = Helper.prepareCall(connection, schema, "PYAPCSP_LST_ALL");
+				callableStatementAPCList = prepareCall("PYAPCSP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementAPCList.execute()) {
 				ResultSet data = callableStatementAPCList.getResultSet();
@@ -338,17 +393,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
+
 	public ArrayList<AnagEnte> getListANE() throws DaoException {
 		ArrayList<AnagEnte> result = new ArrayList<AnagEnte>();
 		try {
 			if (callableStatementANEList == null) {
-				callableStatementANEList = Helper.prepareCall(connection, schema, "PYANESP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementANEList = Helper.prepareCall(connection, schema, "PYANESP_LST_ALL");
+				callableStatementANEList = prepareCall("PYANESP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementANEList.execute()) {
 				ResultSet data = callableStatementANEList.getResultSet();
@@ -361,16 +421,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}
-	
-	
+
 	public void insertANE(AnagEnte anagEnte) throws DaoException, SQLException {
-		try{
+		try {
 			if (callableStatementANEIns == null) {
-				callableStatementANEIns = Helper.prepareCall(connection, schema, "PYANESP_INS2");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementANEIns = Helper.prepareCall(connection, schema, "PYANESP_INS2");
+				callableStatementANEIns = prepareCall("PYANESP_INS2");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementANEIns.setString(1, anagEnte.getChiaveEnte()); 
 			callableStatementANEIns.setString(2, anagEnte.getCodiceEnte()); 
@@ -390,15 +455,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		}
 	}
-	
+
 	public void insertGTW(GatewayPagamento gatewayPagamento) throws DaoException, SQLException {
-		try{
+		try {
 			if (callableStatementGTWIns == null) {
-				callableStatementGTWIns = Helper.prepareCall(connection, schema, "PYGTWSP_INS2");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementGTWIns = Helper.prepareCall(connection, schema, "PYGTWSP_INS2");
+				callableStatementGTWIns = prepareCall("PYGTWSP_INS2");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementGTWIns.setString(1, gatewayPagamento.getUser().getCompany().getCompanyCode());
 			callableStatementGTWIns.setString(2, gatewayPagamento.getUser().getUserCode());
@@ -439,16 +511,23 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		}
 	}
-	
+
 	public ArrayList<Ente> getListENT() throws DaoException {
 		ArrayList<Ente> result = new ArrayList<Ente>();
 		try {
 			if (callableStatementENTList == null) {
-				callableStatementENTList = Helper.prepareCall(connection, schema, "PYENTSP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementENTList = Helper.prepareCall(connection, schema, "PYENTSP_LST_ALL");
+				callableStatementENTList = prepareCall("PYENTSP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementENTList.execute()) {
 				ResultSet data = callableStatementENTList.getResultSet();
@@ -461,17 +540,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
+
 	public ArrayList<Bollettino> getListBOL() throws DaoException {
 		ArrayList<Bollettino> result = new ArrayList<Bollettino>();
 		try {
 			if (callableStatementBOLList == null) {
-				callableStatementBOLList = Helper.prepareCall(connection, schema, "PYBOLSP_LST");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementBOLList = Helper.prepareCall(connection, schema, "PYBOLSP_LST");
+				callableStatementBOLList = prepareCall("PYBOLSP_LST");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementBOLList.execute()) {
 				ResultSet data = callableStatementBOLList.getResultSet();
@@ -484,16 +568,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
+
 	public ArrayList<ConfigUtenteTipoServizioEnte> getListCFE() throws DaoException{
 		ArrayList<ConfigUtenteTipoServizioEnte> result = new ArrayList<ConfigUtenteTipoServizioEnte>();
 		try {
 			if (callableStatementCFEList == null) {
-				callableStatementCFEList = Helper.prepareCall(connection, schema, "PYCFESP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementCFEList = Helper.prepareCall(connection, schema, "PYCFESP_LST_ALL");
+				callableStatementCFEList = prepareCall("PYCFESP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementCFEList.execute()) {
 				ResultSet data = callableStatementCFEList.getResultSet();
@@ -506,17 +596,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
+
 	public ArrayList<ConfigUtenteTipoServizio> getListCFS() throws DaoException{
 		ArrayList<ConfigUtenteTipoServizio> result = new ArrayList<ConfigUtenteTipoServizio>();		
 		try {
 			if (callableStatementCFSList == null) {
-				callableStatementCFSList = Helper.prepareCall(connection, schema, "PYCFSSP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementCFSList = Helper.prepareCall(connection, schema, "PYCFSSP_LST_ALL");
+				callableStatementCFSList = prepareCall("PYCFSSP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementCFSList.execute()) {
 				ResultSet data = callableStatementCFSList.getResultSet();
@@ -529,16 +624,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}
-	
+
 	public ArrayList<CanalePagamento> getListCAN() throws DaoException{
 		ArrayList<CanalePagamento> result = new ArrayList<CanalePagamento>();
 		try {
 			if (callableStatementCANList == null) {
-				callableStatementCANList = Helper.prepareCall(connection, schema, "PYCANSP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementCANList = Helper.prepareCall(connection, schema, "PYCANSP_LST_ALL");
+				callableStatementCANList = prepareCall("PYCANSP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementCANList.execute()) {
 				ResultSet data = callableStatementCANList.getResultSet();
@@ -551,18 +652,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}
-	
-	
-	
+
 	public ArrayList<AbilitaCanalePagamentoTipoServizioEnte> getListCES() throws DaoException{
 		ArrayList<AbilitaCanalePagamentoTipoServizioEnte> result = new ArrayList<AbilitaCanalePagamentoTipoServizioEnte>();
 		try {
 			if (callableStatementCESList == null) {
-				callableStatementCESList = Helper.prepareCall(connection, schema, "PYCESSP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementCESList = Helper.prepareCall(connection, schema, "PYCESSP_LST_ALL");
+				callableStatementCESList = prepareCall("PYCESSP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementCESList.execute()) {
 				ResultSet data = callableStatementCESList.getResultSet();
@@ -575,8 +680,11 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}
 
@@ -584,7 +692,10 @@ public class SvecchiamentoDAO {
 		ArrayList<TipologiaServizio> result = new ArrayList<TipologiaServizio>();
 		try {
 			if (callableStatementTSEList == null) {
-				callableStatementTSEList = Helper.prepareCall(connection, schema, "PYTSESP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementTSEList = Helper.prepareCall(connection, schema, "PYTSESP_LST_ALL");
+				callableStatementTSEList = prepareCall("PYTSESP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementTSEList.execute()) {
 				ResultSet data = callableStatementTSEList.getResultSet();
@@ -597,17 +708,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
+
 	public ArrayList<GatewayPagamento> getListGTW() throws DaoException{
 		ArrayList<GatewayPagamento> result = new ArrayList<GatewayPagamento>();
 		try {
 			if (callableStatementGTWList == null) {
-				callableStatementGTWList = Helper.prepareCall(connection, schema, "PYGTWSP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementGTWList = Helper.prepareCall(connection, schema, "PYGTWSP_LST_ALL");
+				callableStatementGTWList = prepareCall("PYGTWSP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementGTWList.execute()) {
 				ResultSet data = callableStatementGTWList.getResultSet();
@@ -620,17 +736,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
+
 	public ArrayList<CartaPagamento> getListCAR() throws DaoException{
 		ArrayList<CartaPagamento> result = new ArrayList<CartaPagamento>();
 		try {
 			if (callableStatementCARList == null) {
-				callableStatementCARList = Helper.prepareCall(connection, schema, "PYCARSP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementCARList = Helper.prepareCall(connection, schema, "PYCARSP_LST_ALL");
+				callableStatementCARList = prepareCall("PYCARSP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementCARList.execute()) {
 				ResultSet data = callableStatementCARList.getResultSet();
@@ -643,17 +764,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}
-	
-	
+
 	public ArrayList<Transazione> getListTRA(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<Transazione> result = new ArrayList<Transazione>();
 		try {
 			if (callableStatementTRAList == null) {
-				callableStatementTRAList = Helper.prepareCall(connection, schema, "PYTRASP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementTRAList = Helper.prepareCall(connection, schema, "PYTRASP_LST_ALL");
+				callableStatementTRAList = prepareCall("PYTRASP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementTRAList.setDate(1, dataTransazione);
 			callableStatementTRAList.setString(2, codSoc);
@@ -668,15 +794,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}
-	
+
 	public void deleteTRA(Transazione transazione) throws DaoException {
 		try	{
 			if (callableStatementTRADel == null) {
-				callableStatementTRADel = Helper.prepareCall(connection, schema, "PYTRASP_DEL2");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementTRADel = Helper.prepareCall(connection, schema, "PYTRASP_DEL2");
+				callableStatementTRADel = prepareCall("PYTRASP_DEL2");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementTRADel.setString(1, transazione.getChiaveTransazione());
 			callableStatementTRADel.execute();
@@ -686,14 +818,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
+
 	public ArrayList<AnagServizi> getListSER() throws DaoException{
 		ArrayList<AnagServizi> result = new ArrayList<AnagServizi>();
 		try {
 			if (callableStatementSERList == null) {
-				callableStatementSERList = Helper.prepareCall(connection, schema, "PYSERSP_LST_ALL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementSERList = Helper.prepareCall(connection, schema, "PYSERSP_LST_ALL");
+				callableStatementSERList = prepareCall("PYSERSP_LST_ALL");
+				//fine LP PGNTBOLDER-1
 			}
 			if (callableStatementSERList.execute()) {
 				ResultSet data = callableStatementSERList.getResultSet();
@@ -706,17 +845,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}	
-		
 		return result;
 	}
-	
-	
+
 	public ArrayList<TransazioneIV> getListTDT(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<TransazioneIV> result = new ArrayList<TransazioneIV>();
 		try {
 			if (callableStatementTDTList == null) {
-				callableStatementTDTList = Helper.prepareCall(connection, schema, "PYTDTSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementTDTList = Helper.prepareCall(connection, schema, "PYTDTSP_LST_BY_DTRA");
+				callableStatementTDTList = prepareCall("PYTDTSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementTDTList.setDate(1, dataTransazione);
 			callableStatementTDTList.setString(2, codSoc);	
@@ -731,15 +875,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}
-	
+
 	public void deleteTDT(TransazioneIV transazioneIV) throws DaoException	{
 		try {
 			if (callableStatementTDTDel == null) {
-				callableStatementTDTDel = Helper.prepareCall(connection, schema, "PYTDTSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementTDTDel = Helper.prepareCall(connection, schema, "PYTDTSP_DEL");
+				callableStatementTDTDel = prepareCall("PYTDTSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementTDTDel.setString(1, transazioneIV.getChiaveTransazioneDettaglio());
 			callableStatementTDTDel.registerOutParameter(2, Types.INTEGER);
@@ -750,15 +900,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
-	
+
 	public ArrayList<QuadraturaNodo> getListQUN(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<QuadraturaNodo> result = new ArrayList<QuadraturaNodo>();
 		try {
 			if (callableStatementQUNList == null) {
-				callableStatementQUNList = Helper.prepareCall(connection, schema, "PYQUNSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementQUNList = Helper.prepareCall(connection, schema, "PYQUNSP_LST_BY_DTRA");
+				callableStatementQUNList = prepareCall("PYQUNSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementQUNList.setDate(1, dataTransazione);
 			callableStatementQUNList.setString(2, codSoc);	
@@ -775,15 +931,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}
-	
+
 	public void insertQUN(QuadraturaNodo quadraturaNodo) throws DaoException{
-		try{
+		try {
 			if (callableStatementQUNIns == null) {
-				callableStatementQUNIns = Helper.prepareCall(connection, schema, "PYQUNSP_INS");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementQUNIns = Helper.prepareCall(connection, schema, "PYQUNSP_INS");
+				callableStatementQUNIns = prepareCall("PYQUNSP_INS");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementQUNIns.setLong(1, quadraturaNodo.getKeyQuadratura());	
 			callableStatementQUNIns.setString(2, quadraturaNodo.getCodSocieta());		
@@ -818,15 +980,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		}
 	}
-	
+
 	public void deleteQUN(QuadraturaNodo quadraturaNodo) throws DaoException {
 		try	{
 			if (callableStatementQUNDel == null) {
-				callableStatementQUNDel = Helper.prepareCall(connection, schema, "PYQUNSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementQUNDel = Helper.prepareCall(connection, schema, "PYQUNSP_DEL");
+				callableStatementQUNDel = prepareCall("PYQUNSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementQUNDel.setLong(1, quadraturaNodo.getKeyQuadratura());
 			callableStatementQUNDel.execute();
@@ -836,14 +1005,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
+
 	public ArrayList<FlussiRen> getListREN(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<FlussiRen> result = new ArrayList<FlussiRen>();
 		try {
 			if (callableStatementRENList == null) {
-				callableStatementRENList = Helper.prepareCall(connection, schema, "PYRENSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementRENList = Helper.prepareCall(connection, schema, "PYRENSP_LST_BY_DTRA");
+				callableStatementRENList = prepareCall("PYRENSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementRENList.setDate(1, dataTransazione);
 			callableStatementRENList.setString(2, codSoc);
@@ -852,22 +1028,27 @@ public class SvecchiamentoDAO {
 				while (data.next())
 					result.add(FlussiRen.getBean_Extended(data));			
 			}
-			
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		} catch (IllegalArgumentException x) {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
+
 	public void deleteREN(FlussiRen flussiRen) throws DaoException {		
 		try	{
 			if (callableStatementRENDel == null) {
-				callableStatementRENDel = Helper.prepareCall(connection, schema, "PYRENSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementRENDel = Helper.prepareCall(connection, schema, "PYRENSP_DEL");
+				callableStatementRENDel = prepareCall("PYRENSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementRENDel.setString(1, flussiRen.getChiaveRendicontazione());
 			callableStatementRENDel.execute();
@@ -877,16 +1058,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
-	
-	
+
 	public ArrayList<NodoSpcRpt> getListRPT(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<NodoSpcRpt> result = new ArrayList<NodoSpcRpt>();
 		try {
 			if (callableStatementRPTList == null) {
-				callableStatementRPTList = Helper.prepareCall(connection, schema, "PYRPTSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementRPTList = Helper.prepareCall(connection, schema, "PYRPTSP_LST_BY_DTRA");
+				callableStatementRPTList = prepareCall("PYRPTSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementRPTList.setDate(1, dataTransazione);
 			callableStatementRPTList.setString(2, codSoc);
@@ -902,16 +1088,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
+
 	public void deleteRPT(NodoSpcRpt nodoSpcRpt) throws DaoException {		
 		try	{
 			if (callableStatementRPTDel == null) {
-				callableStatementRPTDel = Helper.prepareCall(connection, schema, "PYRPTSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementRPTDel = Helper.prepareCall(connection, schema, "PYRPTSP_DEL");
+				callableStatementRPTDel = prepareCall("PYRPTSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementRPTDel.setString(1, String.valueOf(nodoSpcRpt.getId()));
 			callableStatementRPTDel.execute();
@@ -921,16 +1112,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
-	
-	
+
 	public ArrayList<ModuloIntegrazionePagamentiNodo> getListMIN(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<ModuloIntegrazionePagamentiNodo> result = new ArrayList<ModuloIntegrazionePagamentiNodo>();
 		try {
 			if (callableStatementMINList == null) {
-				callableStatementMINList = Helper.prepareCall(connection, schema, "PYMINSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMINList = Helper.prepareCall(connection, schema, "PYMINSP_LST_BY_DTRA");
+				callableStatementMINList = prepareCall("PYMINSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementMINList.setDate(1, dataTransazione);
 			callableStatementMINList.setString(2, codSoc);
@@ -945,16 +1141,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
+
 	public void deleteMIN(ModuloIntegrazionePagamentiNodo moduloIntegrazionePagamenti) throws DaoException {		
 		try	{
 			if (callableStatementMINDel == null) {
-				callableStatementMINDel = Helper.prepareCall(connection, schema, "PYMINSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMINDel = Helper.prepareCall(connection, schema, "PYMINSP_DEL");
+				callableStatementMINDel = prepareCall("PYMINSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}	
 			callableStatementMINDel.setString(1, moduloIntegrazionePagamenti.getChiaveTransazione());
 			callableStatementMINDel.execute();
@@ -964,16 +1165,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
-	
-	
+
 	public ArrayList<ModuloIntegrazionePagamentiPaymentStatus> getListMPS(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<ModuloIntegrazionePagamentiPaymentStatus> result = new ArrayList<ModuloIntegrazionePagamentiPaymentStatus>();	
 		try {
 			if (callableStatementMPSList == null) {
-				callableStatementMPSList = Helper.prepareCall(connection, schema, "PYMPSSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMPSList = Helper.prepareCall(connection, schema, "PYMPSSP_LST_BY_DTRA");
+				callableStatementMPSList = prepareCall("PYMPSSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementMPSList.setDate(1, dataTransazione);
 			callableStatementMPSList.setString(2, codSoc);
@@ -988,16 +1194,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
+
 	public void insertMPS(ModuloIntegrazionePagamentiPaymentStatus moduloIntPagamentiStatus) throws DaoException{
-		try{
+		try {
 			if (callableStatementMPSIns == null) {
-				callableStatementMPSIns = Helper.prepareCall(connection, schema, "PYMPSSP_INS2");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMPSIns = Helper.prepareCall(connection, schema, "PYMPSSP_INS2");
+				callableStatementMPSIns = prepareCall("PYMPSSP_INS2");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementMPSIns.setString(1, moduloIntPagamentiStatus.getChiaveTransazione());	
 			callableStatementMPSIns.setInt(2, moduloIntPagamentiStatus.getGruppoTentativiNotifica());		
@@ -1021,16 +1232,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		}
 	}
-	
-	
+
 	public void deleteMPS(ModuloIntegrazionePagamentiPaymentStatus moduloIntPagamentiStatus) throws DaoException {		
 		try	{
 			if (callableStatementMPSDel == null) {
-				callableStatementMPSDel = Helper.prepareCall(connection, schema, "PYMPSSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMPSDel = Helper.prepareCall(connection, schema, "PYMPSSP_DEL");
+				callableStatementMPSDel = prepareCall("PYMPSSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementMPSDel.setString(1, moduloIntPagamentiStatus.getChiaveTransazione());
 			callableStatementMPSDel.setLong(2, moduloIntPagamentiStatus.getGruppoTentativiNotifica());
@@ -1042,15 +1259,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
-	
+
 	public ArrayList<ModuloIntegrazionePagamenti> getListMIP(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<ModuloIntegrazionePagamenti> result = new ArrayList<ModuloIntegrazionePagamenti>();
 		try {
 			if (callableStatementMIPList == null) {
-				callableStatementMIPList = Helper.prepareCall(connection, schema, "PYMIPSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMIPList = Helper.prepareCall(connection, schema, "PYMIPSP_LST_BY_DTRA");
+				callableStatementMIPList = prepareCall("PYMIPSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementMIPList.setDate(1, dataTransazione);
 			callableStatementMIPList.setString(2, codSoc);
@@ -1065,17 +1288,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
-	
+
 	public void deleteMIP(ModuloIntegrazionePagamenti moduloIntegrazionePagamenti) throws DaoException {
 		try	{
 			if (callableStatementMIPDel == null) {
-				callableStatementMIPDel = Helper.prepareCall(connection, schema, "PYMIPSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMIPDel = Helper.prepareCall(connection, schema, "PYMIPSP_DEL");
+				callableStatementMIPDel = prepareCall("PYMIPSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementMIPDel.setString(1, moduloIntegrazionePagamenti.getChiaveTransazione());
 			callableStatementMIPDel.execute();
@@ -1085,15 +1312,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
-	
+
 	public ArrayList<TransazioneFreccia> getListTFR(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<TransazioneFreccia> result = new ArrayList<TransazioneFreccia>();
 		try {
 			if (callableStatementTFRList == null) {
-				callableStatementTFRList = Helper.prepareCall(connection, schema, "PYTFRSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementTFRList = Helper.prepareCall(connection, schema, "PYTFRSP_LST_BY_DTRA");
+				callableStatementTFRList = prepareCall("PYTFRSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementTFRList.setDate(1, dataTransazione);	
 			callableStatementTFRList.setString(2, codSoc);	
@@ -1102,23 +1335,27 @@ public class SvecchiamentoDAO {
 				while (data.next())
 					result.add(TransazioneFreccia.getBean(data));			
 			}
-			
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		} catch (IllegalArgumentException x) {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
+
 	public void deleteTFR(TransazioneFreccia transazioneFreccia) throws DaoException {		
 		try	{
 			if (callableStatementTFRDel == null) {
-				callableStatementTFRDel = Helper.prepareCall(connection, schema, "PYTFRSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementTFRDel = Helper.prepareCall(connection, schema, "PYTFRSP_DEL");
+				callableStatementTFRDel = prepareCall("PYTFRSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}	
 			callableStatementTFRDel.setString(1, transazioneFreccia.getChiaveTransazioneDettaglio());
 			callableStatementTFRDel.execute();
@@ -1128,15 +1365,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-		
-	
+
 	public ArrayList<TransazioneIci> getListTIC(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<TransazioneIci> result = new ArrayList<TransazioneIci>();
 		try {
 			if (callableStatementTICList == null) {
-				callableStatementTICList = Helper.prepareCall(connection, schema, "PYTICSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementTICList = Helper.prepareCall(connection, schema, "PYTICSP_LST_BY_DTRA");
+				callableStatementTICList = prepareCall("PYTICSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementTICList.setDate(1, dataTransazione);	
 			callableStatementTICList.setString(2, codSoc);
@@ -1152,16 +1395,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
+
 	public void deleteTIC(TransazioneIci transazioneIci) throws DaoException {
 		try	{
 			if (callableStatementTICDel == null) {
-				callableStatementTICDel = Helper.prepareCall(connection, schema, "PYTICSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementTICDel = Helper.prepareCall(connection, schema, "PYTICSP_DEL");
+				callableStatementTICDel = prepareCall("PYTICSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}		
 			callableStatementTICDel.setString(1, transazioneIci.getChiaveTransazioneIci());
 			callableStatementTICDel.execute();
@@ -1171,15 +1419,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
-	
+
 	public ArrayList<MovimentoDiCassa> getListMDC(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<MovimentoDiCassa> result = new ArrayList<MovimentoDiCassa>();
 		try {
 			if (callableStatementMDCList == null) {
-				callableStatementMDCList = Helper.prepareCall(connection, schema, "PYMDCSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMDCList = Helper.prepareCall(connection, schema, "PYMDCSP_LST_BY_DTRA");
+				callableStatementMDCList = prepareCall("PYMDCSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementMDCList.setDate(1, dataTransazione);		
 			callableStatementMDCList.setString(2, codSoc);	
@@ -1194,16 +1448,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}
-	
-	
+
 	public void insertMDC(MovimentoDiCassa movimentoDiCassa) throws DaoException{
-		try{
+		try {
 			if (callableStatementMDCIns == null) {
-				callableStatementMDCIns = Helper.prepareCall(connection, schema, "PYMDCSP_INS2");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMDCIns = Helper.prepareCall(connection, schema, "PYMDCSP_INS2");
+				callableStatementMDCIns = prepareCall("PYMDCSP_INS2");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementMDCIns.setLong(1, movimentoDiCassa.getId());	
 			callableStatementMDCIns.setString(2, movimentoDiCassa.getCodiceSocieta());
@@ -1235,18 +1494,24 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		}
 	}
-	
-	
+
 	public void deleteMDC(MovimentoDiCassa movimentoDiCassa) throws DaoException {		
 		try	{
 			if (callableStatementMDCDel == null) {
-				callableStatementMDCDel = Helper.prepareCall(connection, schema, "PYMDCSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementMDCDel = Helper.prepareCall(connection, schema, "PYMDCSP_DEL");
+				callableStatementMDCDel = prepareCall("PYMDCSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}
-			callableStatementMDCDel = Helper.prepareCall(connection, schema, "PYMDCSP_DEL");	
+			//callableStatementMDCDel = Helper.prepareCall(connection, schema, "PYMDCSP_DEL"); //LP PGNTBOLDER-1
 			callableStatementMDCDel.setString(1, String.valueOf(movimentoDiCassa.getId()));
 			callableStatementMDCDel.execute();
 		} catch (SQLException x) {
@@ -1255,16 +1520,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
-	
-	
+
 	public ArrayList<GiornaleDiCassa> getListGDC(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<GiornaleDiCassa> result = new ArrayList<GiornaleDiCassa>();
 		try {
 			if (callableStatementGDCList == null) {
-				callableStatementGDCList = Helper.prepareCall(connection, schema, "PYGDCSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementGDCList = Helper.prepareCall(connection, schema, "PYGDCSP_LST_BY_DTRA");
+				callableStatementGDCList = prepareCall("PYGDCSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementGDCList.setDate(1, dataTransazione);	
 			callableStatementGDCList.setString(2, codSoc);	
@@ -1279,16 +1549,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-
 		return result;
 	}
-	
-	
+
 	public void insertGDC(GiornaleDiCassa giornaleDiCassa) throws DaoException{
-		try{
+		try {
 			if (callableStatementGDCIns == null) {
-				callableStatementGDCIns = Helper.prepareCall(connection, schema, "PYGDCSP_INS2");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementGDCIns = Helper.prepareCall(connection, schema, "PYGDCSP_INS2");
+				callableStatementGDCIns = prepareCall("PYGDCSP_INS2");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementGDCIns.setLong(1, giornaleDiCassa.getId());	
 			callableStatementGDCIns.setString(2, giornaleDiCassa.getCodSocieta());
@@ -1305,16 +1580,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		}
 	}
-	
-	
+
 	public void deleteGDC(GiornaleDiCassa giornaleDiCassa) throws DaoException {		
 		try	{
 			if (callableStatementGDCDel == null) {
-				callableStatementGDCDel = Helper.prepareCall(connection, schema, "PYGDCSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementGDCDel = Helper.prepareCall(connection, schema, "PYGDCSP_DEL");
+				callableStatementGDCDel = prepareCall("PYGDCSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}	
 			callableStatementGDCDel.setString(1, String.valueOf(giornaleDiCassa.getId()));
 			callableStatementGDCDel.execute();
@@ -1324,13 +1605,20 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
+
 	public void deleteATM(TransazioneAtm transazioneAtm) throws DaoException {		
 		try	{
 			if (callableStatementATMDel == null) {
-				callableStatementATMDel = Helper.prepareCall(connection, schema, "PYATMSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementATMDel = Helper.prepareCall(connection, schema, "PYATMSP_DEL");
+				callableStatementATMDel = prepareCall("PYATMSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}	
 			callableStatementATMDel.setString(1, String.valueOf(transazioneAtm.getChiaveTransazioneInterna()));
 			callableStatementATMDel.execute();
@@ -1340,13 +1628,20 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
+
 	public void deletePOS(POS pos) throws DaoException {		
 		try	{
 			if (callableStatementPOSDel == null) {
-				callableStatementPOSDel = Helper.prepareCall(connection, schema, "PYPOSSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementPOSDel = Helper.prepareCall(connection, schema, "PYPOSSP_DEL");
+				callableStatementPOSDel = prepareCall("PYPOSSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}	
 			callableStatementPOSDel.setString(1, String.valueOf(pos.getChiaveTransazione()));
 			callableStatementPOSDel.execute();
@@ -1356,14 +1651,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
+
 	public ArrayList<AssociazioneTransazioni> getListRMT(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<AssociazioneTransazioni> result = new ArrayList<AssociazioneTransazioni>();
 		try {
 			if (callableStatementRMTList == null) {
-				callableStatementRMTList = Helper.prepareCall(connection, schema, "PYRMTSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementRMTList = Helper.prepareCall(connection, schema, "PYRMTSP_LST_BY_DTRA");
+				callableStatementRMTList = prepareCall("PYRMTSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementRMTList.setDate(1, dataTransazione);
 			callableStatementRMTList.setString(2, codSoc);
@@ -1378,15 +1680,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}
-	
+
 	public void insertRMT(AssociazioneTransazioni collegamentoTransazione) throws DaoException{
-		try{
+		try {
 			if (callableStatementRMTIns == null) {
-				callableStatementRMTIns = Helper.prepareCall(connection, schema, "PYRMTSP_INS2");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementRMTIns = Helper.prepareCall(connection, schema, "PYRMTSP_INS2");
+				callableStatementRMTIns = prepareCall("PYRMTSP_INS2");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementRMTIns.setLong(1, collegamentoTransazione.getIdMdc());	
 			callableStatementRMTIns.setLong(2, collegamentoTransazione.getIdNodoScript());				
@@ -1395,17 +1703,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		}
 	}
-	
-	
-	
+
 	public void deleteRMT(AssociazioneTransazioni collegamentoTransazione) throws DaoException {
 		try	{
 			if (callableStatementRMTDel == null) {
-				callableStatementRMTDel = Helper.prepareCall(connection, schema, "PYRMTSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementRMTDel = Helper.prepareCall(connection, schema, "PYRMTSP_DEL");
+				callableStatementRMTDel = prepareCall("PYRMTSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementRMTDel.setString(1, String.valueOf(collegamentoTransazione.getIdMdc()));
 			callableStatementRMTDel.execute();
@@ -1415,15 +1728,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
-	
+
 	public ArrayList<AssociazioneFlussi> getListRMF(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<AssociazioneFlussi> result = new ArrayList<AssociazioneFlussi>();
 		try {
 			if (callableStatementRMFList == null) {
-				callableStatementRMFList = Helper.prepareCall(connection, schema, "PYRMFSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementRMFList = Helper.prepareCall(connection, schema, "PYRMFSP_LST_BY_DTRA");
+				callableStatementRMFList = prepareCall("PYRMFSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementRMFList.setDate(1, dataTransazione);	
 			callableStatementRMFList.setString(2, codSoc);
@@ -1438,17 +1757,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}	
-	
-	
-	
+
 	public void insertRMF(AssociazioneFlussi collegamentoFlussi) throws DaoException{
-		try{
+		try {
 			if (callableStatementRMFIns == null) {
-				callableStatementRMFIns = Helper.prepareCall(connection, schema, "PYRMFSP_INS2");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementRMFIns = Helper.prepareCall(connection, schema, "PYRMFSP_INS2");
+				callableStatementRMFIns = prepareCall("PYRMFSP_INS2");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementRMFIns.setLong(1, collegamentoFlussi.getIdMdc());	
 			callableStatementRMFIns.setLong(2, collegamentoFlussi.getIdQuadratura());						
@@ -1457,6 +1780,10 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		}
@@ -1465,7 +1792,10 @@ public class SvecchiamentoDAO {
 	public void deleteRMF(AssociazioneFlussi collegamentoFlussi) throws DaoException {
 		try	{
 			if (callableStatementRMFDel == null) {
-				callableStatementRMFDel = Helper.prepareCall(connection, schema, "PYRMFSP_DEL");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementRMFDel = Helper.prepareCall(connection, schema, "PYRMFSP_DEL");
+				callableStatementRMFDel = prepareCall("PYRMFSP_DEL");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementRMFDel.setString(1, String.valueOf(collegamentoFlussi.getIdMdc()));
 			callableStatementRMFDel.execute();
@@ -1475,13 +1805,20 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
+
 	public boolean insertREN(FlussiRen fr) throws DaoException {
-		try{
+		try {
 			if (callableStatementRENIns == null) {
-				callableStatementRENIns = Helper.prepareCall(connection, schema, "PYRENSP_INS2");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementRENIns = Helper.prepareCall(connection, schema, "PYRENSP_INS2");
+				callableStatementRENIns = prepareCall("PYRENSP_INS2");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementRENIns.setString(1,fr.getChiaveRendicontazione());
 			callableStatementRENIns.setString(2, fr.getTipologiaFlusso());
@@ -1510,13 +1847,20 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
+
 	public boolean insertRPT (NodoSpcRpt nodoSpcRpt) throws DaoException {
 		try	{
 			if (callableStatementRPTIns == null) {
-				callableStatementRPTIns = Helper.prepareCall(connection, schema, "PYRPTSP_INS2");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementRPTIns = Helper.prepareCall(connection, schema, "PYRPTSP_INS2");
+				callableStatementRPTIns = prepareCall("PYRPTSP_INS2");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementRPTIns.setString(1, nodoSpcRpt.getId().toString());
 			callableStatementRPTIns.setString(2, nodoSpcRpt.getChiaveTra());
@@ -1559,14 +1903,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
+
 	public ArrayList<TransazioneAtm> getListATM(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<TransazioneAtm> result = new ArrayList<TransazioneAtm>();
 		try {
 			if (callableStatementATMList == null) {
-				callableStatementATMList = Helper.prepareCall(connection, schema, "PYATMSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementATMList = Helper.prepareCall(connection, schema, "PYATMSP_LST_BY_DTRA");
+				callableStatementATMList = prepareCall("PYATMSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementATMList.setDate(1, dataTransazione);		
 			callableStatementATMList.setString(2, codSoc);
@@ -1581,16 +1932,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}
-	
+
 	public ArrayList<POS> getListPOS(Date dataTransazione, String codSoc) throws DaoException{
 		ArrayList<POS> result = new ArrayList<POS>();
 		try {
 			if (callableStatementPOSList == null) {
-				callableStatementPOSList = Helper.prepareCall(connection, schema, "PYPOSSP_LST_BY_DTRA");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementPOSList = Helper.prepareCall(connection, schema, "PYPOSSP_LST_BY_DTRA");
+				callableStatementPOSList = prepareCall("PYPOSSP_LST_BY_DTRA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementPOSList.setDate(1, dataTransazione);
 			callableStatementPOSList.setString(2, codSoc);
@@ -1605,15 +1962,21 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
-		
 		return result;
 	}
-	
+
 	public void insertTRA(Transazione transazione) throws DaoException, SQLException {
-		try{
+		try {
 			if (callableStatementTRAIns == null) {
-				callableStatementTRAIns = Helper.prepareCall(connection, schema, "PYTRASP_INS2");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementTRAIns = Helper.prepareCall(connection, schema, "PYTRASP_INS2");
+				callableStatementTRAIns = prepareCall("PYTRASP_INS2");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementTRAIns.setString(1, transazione.getChiaveTransazione());
 			callableStatementTRAIns.setString(2, transazione.getCodiceSocieta());
@@ -1662,23 +2025,28 @@ public class SvecchiamentoDAO {
 			callableStatementTRAIns.setString(45, transazione.getCampoOpzionale2());
 			callableStatementTRAIns.setTimestamp(46, new java.sql.Timestamp(transazione.getDataAccredito().getTime()));
 			callableStatementTRAIns.setString(47, transazione.getNumeroRiferimentoOrdineGateway());
-
 			callableStatementTRAIns.executeUpdate();
-			
 		} catch (IllegalArgumentException x) {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		}
 	}
-	
+
 	public boolean insertSEUSR(SeUser bean, String codSoc) throws Exception {
-		if(bean == null)return false;
-		try{	
-			if (callableStatementSEUSRIns==null) {
-				callableStatementSEUSRIns = Helper.prepareCall(connection, schema, "SEUSRSP_INS_PIVA");	//connessione al db SEC00DB0
+		if(bean == null) return false;
+		try {	
+			if (callableStatementSEUSRIns == null) {
+				//inizio LP PGNTBOLDER-1
+				//callableStatementSEUSRIns = Helper.prepareCall(connection, schema, "SEUSRSP_INS_PIVA");	//connessione al db SEC00DB0
+				callableStatementSEUSRIns = prepareCall("SEUSRSP_INS_PIVA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementSEUSRIns.setString(1, bean.getUsername());
 			callableStatementSEUSRIns.setString(2, bean.getTipologiaUtente());
@@ -1743,27 +2111,32 @@ public class SvecchiamentoDAO {
 			callableStatementSEUSRIns.setString(61, codSoc);
 			callableStatementSEUSRIns.setString(62, bean.getFlagOperatoreBackOffice());
 			callableStatementSEUSRIns.registerOutParameter(63, Types.INTEGER);
-
 			callableStatementSEUSRIns.executeUpdate();
 			if (callableStatementSEUSRIns.getInt(63) == 1) return true;
 			else return false;
-			
 		} catch (SQLException x) {
 			throw new Exception(x);
 		} catch (IllegalArgumentException x) {
-			throw new Exception(x);
+			throw new DaoException(x);
 		} catch (HelperException x) {
-			throw new Exception(x);
+			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 		finally {
 		}
 	}
-	
+
 	public boolean updateSEUSR(SeUser bean, String codSoc) throws Exception {
-		if(bean == null)return false;
-		try{	
-			if (callableStatementSEUSRUpdate==null) {
-				callableStatementSEUSRUpdate = Helper.prepareCall(connection, schema, "SEUSRSP_UPD_PIVA");	//connessione al db SEC00DB0
+		if(bean == null) return false;
+		try {	
+			if (callableStatementSEUSRUpdate == null) {
+				//inizio LP PGNTBOLDER-1
+				//callableStatementSEUSRUpdate = Helper.prepareCall(connection, schema, "SEUSRSP_UPD_PIVA");	//connessione al db SEC00DB0
+				callableStatementSEUSRUpdate = prepareCall("SEUSRSP_UPD_PIVA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementSEUSRUpdate.setString(1, bean.getUsername());
 			callableStatementSEUSRUpdate.setString(2, bean.getTipologiaUtente());
@@ -1828,29 +2201,33 @@ public class SvecchiamentoDAO {
 			callableStatementSEUSRUpdate.setString(61, codSoc);
 			callableStatementSEUSRUpdate.setString(62, bean.getFlagOperatoreBackOffice());
 			callableStatementSEUSRUpdate.registerOutParameter(63, Types.INTEGER);
-
 			callableStatementSEUSRUpdate.executeUpdate();
 			if (callableStatementSEUSRUpdate.getInt(63) == 1) return true;
 			else return false;
-			
 		} catch (SQLException x) {
 			throw new Exception(x);
 		} catch (IllegalArgumentException x) {
-			throw new Exception(x);
+			throw new DaoException(x);
 		} catch (HelperException x) {
-			throw new Exception(x);
+			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 		finally {
 		}
 	}
-	
+
 	public SeUser selectSEUSR(String username, String codiceSocieta) throws Exception{
 		ResultSet data = null;
 		SeUser seUser = null;
-
-		try{
-			if (callableStatementSEUSRSel==null) {
-				callableStatementSEUSRSel = Helper.prepareCall(connection, schema, "SEUSRSP_SEL_PIVA");
+		try {
+			if (callableStatementSEUSRSel == null) {
+				//inizio LP PGNTBOLDER-1
+				//callableStatementSEUSRSel = Helper.prepareCall(connection, schema, "SEUSRSP_SEL_PIVA");
+				callableStatementSEUSRSel = prepareCall("SEUSRSP_SEL_PIVA");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementSEUSRSel.setString(1, username);
 			callableStatementSEUSRSel.setString(2, codiceSocieta);
@@ -1863,19 +2240,26 @@ public class SvecchiamentoDAO {
 		} catch (SQLException x) {
 			throw new Exception(x);
 		} catch (IllegalArgumentException x) {
-			throw new Exception(x);
+			throw new DaoException(x);
 		} catch (HelperException x) {
-			throw new Exception(x);
+			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 		finally
 		{
 		}
 	}
-	
+
 	public void insertSESOC(String codSoc, String descrSoc) throws DaoException, SQLException {
-		try{
+		try {
 			if (callableStatementSESOCIns == null) {
-				callableStatementSESOCIns = Helper.prepareCall(connection, schema, "SESOCSP_INS");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementSESOCIns = Helper.prepareCall(connection, schema, "SESOCSP_INS");
+				callableStatementSESOCIns = prepareCall("SESOCSP_INS");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementSESOCIns.setString(1, codSoc);
 			callableStatementSESOCIns.setString(2, descrSoc);
@@ -1886,15 +2270,22 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		} catch (SQLException x) {
 			throw new DaoException(x);
 		}
 	}
-	
+
 	public void dropTrigger() throws DaoException {
 		try	{
 			if (callableStatementDropTrigger == null) {
-				callableStatementDropTrigger = Helper.prepareCall(connection, schema, "PYTRASP_DROP_TRIGGER3");
+				//inizio LP PGNTBOLDER-1
+				//callableStatementDropTrigger = Helper.prepareCall(connection, schema, "PYTRASP_DROP_TRIGGER3");
+				callableStatementDropTrigger = prepareCall("PYTRASP_DROP_TRIGGER3");
+				//fine LP PGNTBOLDER-1
 			}
 			callableStatementDropTrigger.execute();
 		} catch (SQLException x) {
@@ -1903,17 +2294,37 @@ public class SvecchiamentoDAO {
 			throw new DaoException(x);
 		} catch (HelperException x) {
 			throw new DaoException(x);
+		//inizio LP PGNTBOLDER-1
+		} catch (ProcedureReflectorException x) {
+			throw new DaoException(x);
+		//fine LP PGNTBOLDER-1
 		}
 	}
-	
+
 	public void createTrigger(String dbSchema) throws SQLException {
-		Statement stmt = connection.createStatement();
-		stmt.execute("CREATE DEFINER=`admin`@`%` TRIGGER `"+dbSchema+"`.`PYTRAT3` BEFORE DELETE ON `"+dbSchema+"`.`PYTRATB` FOR EACH ROW "+
+		//inizio LP 20240820 - PGNTBOLDER-1
+		//Statement stmt = connection.createStatement();
+		Statement stmt = getConnection().createStatement();
+		if (DriverType.isPostgres(getConnection())) {		
+			stmt.execute(
+						"CREATE OR REPLACE TRIGGER PYTRAT3 " +
+						"BEFORE DELETE ON  " + dbSchema + ".PYTRATB " +  
+						"FOR EACH ROW "+ 
+						"WHEN ((OLD.TRA_FTRAFESI = '1' OR OLD.TRA_CTRACOPE = '2') AND UPPER(OLD.tra_ctracope) != 'MIGRAZIONE')" +
+						"EXECUTE FUNCTION SWP_GenError();"		
+						);
+		} else {
+		//fine LP 20240820 - PGNTBOLDER-1
+			stmt.execute("CREATE DEFINER=`admin`@`%` TRIGGER `" + dbSchema + "`.`PYTRAT3` BEFORE DELETE ON `" + dbSchema + "`.`PYTRATB` FOR EACH ROW "+
 					"BEGIN "+
-						"if (OLD.TRA_FTRAFESI IN ('1', '2') AND OLD.TRA_CTRACOPE != 'Migrazione') then "+
-							"call SWP_GenError('Impossibile cancellare una transazione con stato 1 o 2!!'); "+
-						"end if; "+
+						"IF (OLD.TRA_FTRAFESI IN ('1', '2') AND OLD.TRA_CTRACOPE != 'Migrazione') THEN "+
+							"CALL SWP_GenError('Impossibile cancellare una transazione con stato 1 o 2!!'); "+
+						"END IF; "+
 					"END");
+			
+		//inizio LP 20240820 - PGNTBOLDER-1
+		}
+		//fine LP 20240820 - PGNTBOLDER-1
 	}
-	
+
 }
