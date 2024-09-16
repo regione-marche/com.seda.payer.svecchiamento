@@ -979,7 +979,7 @@ public class SvecchiamentoDAO extends BaseDaoHandler {
 				callableStatementRPTDel = prepareCall(false, "PYRPTSP_DEL");
 				//fine LP 20240909 - PGNTBOLDER-1
 			}
-			callableStatementRPTDel.setString(1, String.valueOf(nodoSpcRpt.getId()));
+			callableStatementRPTDel.setLong(1, nodoSpcRpt.getId().longValue());
 			callableStatementRPTDel.execute();
 		} catch (SQLException x) {
 			throw new DaoException(x);
@@ -1294,7 +1294,7 @@ public class SvecchiamentoDAO extends BaseDaoHandler {
 			callableStatementMDCIns.setLong(5, movimentoDiCassa.getIdGiornale());
 			callableStatementMDCIns.setString(6, movimentoDiCassa.getConto());
 			callableStatementMDCIns.setString(7, movimentoDiCassa.getStatoSospeso());
-			callableStatementMDCIns.setString(8, movimentoDiCassa.getNumDocumento());
+			callableStatementMDCIns.setLong(8, Long.parseLong(movimentoDiCassa.getNumDocumento()));
 			callableStatementMDCIns.setString(9, movimentoDiCassa.getCliente());
 			callableStatementMDCIns.setBigDecimal(10, movimentoDiCassa.getImporto());
 			callableStatementMDCIns.setString(11, movimentoDiCassa.getRendicontato());
@@ -1331,7 +1331,7 @@ public class SvecchiamentoDAO extends BaseDaoHandler {
 				//fine LP 20240909 - PGNTBOLDER-1
 			}
 			//callableStatementMDCDel = Helper.prepareCall(connection, schema, "PYMDCSP_DEL"); //LP 20240909 - PGNTBOLDER-1
-			callableStatementMDCDel.setString(1, String.valueOf(movimentoDiCassa.getId()));
+			callableStatementMDCDel.setLong(1, movimentoDiCassa.getId());
 			callableStatementMDCDel.execute();
 		} catch (SQLException x) {
 			throw new DaoException(x);
@@ -1382,7 +1382,7 @@ public class SvecchiamentoDAO extends BaseDaoHandler {
 			callableStatementGDCIns.setString(4, giornaleDiCassa.getCodEnte());			
 			callableStatementGDCIns.setString(5, giornaleDiCassa.getProvenienza());
 			callableStatementGDCIns.setString(6, giornaleDiCassa.getIdFlusso());		
-			callableStatementGDCIns.setInt(7, giornaleDiCassa.getEsercizio());
+			callableStatementGDCIns.setLong(7, giornaleDiCassa.getEsercizio());
 			callableStatementGDCIns.setTimestamp(8, new java.sql.Timestamp(giornaleDiCassa.getDataGiornale().getTimeInMillis()));
 			callableStatementGDCIns.setTimestamp(9, new java.sql.Timestamp(giornaleDiCassa.getDataGiornaleDa().getTimeInMillis()));
 			callableStatementGDCIns.setTimestamp(10, new java.sql.Timestamp(giornaleDiCassa.getDataGiornaleA().getTimeInMillis()));	
@@ -1404,7 +1404,7 @@ public class SvecchiamentoDAO extends BaseDaoHandler {
 				callableStatementGDCDel = prepareCall(false, "PYGDCSP_DEL");
 				//fine LP 20240909 - PGNTBOLDER-1
 			}	
-			callableStatementGDCDel.setString(1, String.valueOf(giornaleDiCassa.getId()));
+			callableStatementGDCDel.setLong(1, giornaleDiCassa.getId());
 			callableStatementGDCDel.execute();
 		} catch (SQLException x) {
 			throw new DaoException(x);
@@ -1507,7 +1507,7 @@ public class SvecchiamentoDAO extends BaseDaoHandler {
 				callableStatementRMTDel = prepareCall(false, "PYRMTSP_DEL");
 				//fine LP 20240909 - PGNTBOLDER-1
 			}
-			callableStatementRMTDel.setString(1, String.valueOf(collegamentoTransazione.getIdMdc()));
+			callableStatementRMTDel.setLong(1, collegamentoTransazione.getIdMdc());
 			callableStatementRMTDel.execute();
 		} catch (SQLException x) {
 			throw new DaoException(x);
@@ -1572,7 +1572,7 @@ public class SvecchiamentoDAO extends BaseDaoHandler {
 				callableStatementRMFDel = prepareCall(false, "PYRMFSP_DEL");
 				//fine LP 20240909 - PGNTBOLDER-1
 			}
-			callableStatementRMFDel.setString(1, String.valueOf(collegamentoFlussi.getIdMdc()));
+			callableStatementRMFDel.setLong(1, collegamentoFlussi.getIdMdc());
 			callableStatementRMFDel.execute();
 		} catch (SQLException x) {
 			throw new DaoException(x);
@@ -1626,10 +1626,10 @@ public class SvecchiamentoDAO extends BaseDaoHandler {
 			if (callableStatementRPTIns == null) {
 				//inizio LP 20240909 - PGNTBOLDER-1
 				//callableStatementRPTIns = Helper.prepareCall(connection, schema, "PYRPTSP_INS2");
-				callableStatementRPTIns = prepareCall(false, "PYRPTSP_INS2");
+				callableStatementRPTIns = prepareCall(false, "	PYRPTSP_INS2");
 				//fine LP 20240909 - PGNTBOLDER-1
 			}
-			callableStatementRPTIns.setString(1, nodoSpcRpt.getId().toString());
+			callableStatementRPTIns.setLong(1, nodoSpcRpt.getId().longValue());
 			callableStatementRPTIns.setString(2, nodoSpcRpt.getChiaveTra());
 			callableStatementRPTIns.setString(3, nodoSpcRpt.getCodSocieta());
 			callableStatementRPTIns.setString(4, nodoSpcRpt.getCodUtente());
