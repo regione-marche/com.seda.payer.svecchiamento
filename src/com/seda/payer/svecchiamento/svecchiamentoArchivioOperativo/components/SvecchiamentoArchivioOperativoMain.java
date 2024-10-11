@@ -4,7 +4,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import com.seda.bap.components.core.BapException;
 import com.seda.bap.components.core.spi.ClassPrinting;
-import com.seda.payer.svecchiamento.svecchiamentoArchivioOperativo.components.SvecchiamentoArchivioOperativoCore;
 import com.seda.payer.svecchiamento.svecchiamentoArchivioOperativo.config.SvecchiamentoArchivioOperativoResponse;
 
 public class SvecchiamentoArchivioOperativoMain {

@@ -30,8 +30,7 @@ public class SvecchiamentoArchivioOperativoResponse {
 	}
 
 	public String toString() {
-		return "SvecchiamentoArchivioOperativoResponse [code=" + code + " ,message=" + message
-				+ "]";
+		return "SvecchiamentoArchivioOperativoResponse [code=" + code + " ,message=" + message + "]";
 	}
 
 }

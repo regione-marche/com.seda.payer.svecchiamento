@@ -427,11 +427,10 @@ public class SvecchiamentoArchivioStoricoCore {
 		w.append(System.getProperties().get("java.specification.vendor") + " ");
 		w.append(System.getProperties().get("java.version") + "\n");
 		w.append("JAVA HOME : "+System.getProperties().get("java.home") + "\n");
-		w.append("(C) Copyright 2018 di E-SED Scrl"  + "\n");
+		w.append("(C) Copyright 2024 Maggioli Spa"  + "\n");
 		w.append("\n");
 		printRow(myPrintingKeySV_SYSOUT,w.toString());
-		w=null;
-
+		w = null;
 		printRow(myPrintingKeySV_SYSOUT,lineSeparator);
 		printRow(myPrintingKeySV_SYSOUT,"Avvio " + "Svecchiamento archivio storico " + "");
 		printRow(myPrintingKeySV_SYSOUT,lineSeparator);

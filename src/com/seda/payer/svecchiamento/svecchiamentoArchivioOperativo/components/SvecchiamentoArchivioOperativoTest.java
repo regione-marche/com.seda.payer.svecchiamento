@@ -12,10 +12,12 @@ public class SvecchiamentoArchivioOperativoTest {
 		Logger logger = Logger.getLogger(SvecchiamentoArchivioOperativoCore.class);
 		//String jobId = "";
 		
+		//inizio LP 20240820 - PGNTBOLDER-1
 		String[] params = new String[]{ 
-				"CONFIGPATH      D:/VIEWs/SUITE_S_AS_SVILUPPO_001_cerquozzi/PayER_VOB/com.seda.payer.svecchiamento/src/com/seda/payer/svecchiamento/svecchiamentoArchivioOperativo/config/svecchiamentoArchivioOperativo.properties",
+				"CONFIGPATH  E://ConfigFiles/svecchiamentoArchivioOperativo.properties",
 				"DATE      31/12/2015"
 				};
+		//fine LP 20240820 - PGNTBOLDER-1
 		try {
 			//core.run(params, null, null, classPrinting ,logger, jobId);
 			core.run(params, classPrinting ,logger);

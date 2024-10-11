@@ -59,7 +59,6 @@ import com.seda.payer.svecchiamento.svecchiamentoArchivioOperativo.config.Svecch
 import com.seda.payer.svecchiamento.util.EMailSender;
 import com.seda.payer.svecchiamento.dao.SvecchiamentoDAO;
 
-
 public class SvecchiamentoArchivioOperativoCore {
 
 	private static String myPrintingKeySV_SYSOUT = "SYSOUT";
@@ -211,12 +210,13 @@ public class SvecchiamentoArchivioOperativoCore {
 
 	private boolean svecchiamentoTransazioni() {
 		boolean result = true;
-		
-		//recupero delle transazioni dal db operativo e copia nel db di backup
 
+		//recupero delle transazioni dal db operativo e copia nel db di backup
 		try {
+
 			listaTRA = sveccDAO.getListTRA(dataSvecchiamento, codSocPartenza);
 			int countTRA = listaTRA.size();
+
 			printRow(myPrintingKeySV_SYSOUT, "codiceSocietà insert in TRA = " + codSocDestinazione);
 			for(Transazione transazione: listaTRA){
 				try {
@@ -429,7 +429,6 @@ public class SvecchiamentoArchivioOperativoCore {
 			errors.add("Errore svecchiamento transazioni "+e.getMessage());
 			e.printStackTrace();
 		}
-
 		//eliminazione delle transazioni dal db operativo
 		if(errors.isEmpty() && result) {
 			printRow(myPrintingKeySV_SYSOUT, "Cancellazione transazioni nell'Archivio Operativo");
@@ -555,15 +554,14 @@ public class SvecchiamentoArchivioOperativoCore {
 			}
 			printRow(myPrintingKeySV_SYSOUT, "Cancellazione dati in tabelle Archivio Operativo eseguita");
 			
-			
-			
 			//eliminazione del trigger PYTRAT3
 			try {
-				printRow(myPrintingKeySV_SYSOUT, "Inizio eleiminazuione Trigger PYTRAT3");
+				printRow(myPrintingKeySV_SYSOUT, "Inizio eleiminazione Trigger PYTRAT3");
 				sveccDAO.dropTrigger();
 			} catch(Exception e) {
 				errors.add("Cancellazione TRIGGER PYTRAT3 "+e.getMessage());
 			}
+
 			for(Transazione transazione: listaTRA){
 				try {
 					printRow(myPrintingKeySV_SYSOUT, "Cancellazione deleteTRA");
@@ -572,6 +570,7 @@ public class SvecchiamentoArchivioOperativoCore {
 					errors.add("Cancellazione TRA "+transazione.getChiaveTransazione()+" - "+e.getMessage());
 				}
 			}
+			
 			//ricreo il trigger PYTRAT3 cancellato prima
 			printRow(myPrintingKeySV_SYSOUT, "Ricreazione Trigger PYTRAT3");
 			try {
@@ -581,6 +580,7 @@ public class SvecchiamentoArchivioOperativoCore {
 				errors.add("Creazione TRIGGER PYTRAT3 "+e.getMessage());
 			}
 			printRow(myPrintingKeySV_SYSOUT, "Cancellazione terminata correttamente");
+
 		} else {
 			rollback();
 		}
@@ -921,7 +921,6 @@ public class SvecchiamentoArchivioOperativoCore {
 			printRow(myPrintingKeySV_SYSOUT, "Errore in fase di allineamento" + e.getMessage());
 			e.printStackTrace();
 			errors.add("Aggiornamento tabelle di configurazione: "+e.getMessage());
-			// TODO: handle exception
 		}
 
 	}
@@ -932,7 +931,7 @@ public class SvecchiamentoArchivioOperativoCore {
 		w.append(System.getProperties().get("java.specification.vendor") + " ");
 		w.append(System.getProperties().get("java.version") + "\n");
 		w.append("JAVA HOME : "+System.getProperties().get("java.home") + "\n");
-		w.append("(C) Copyright 2018 di E-SED Scrl"  + "\n");
+		w.append("(C) Copyright 2024 Maggioli Spa"  + "\n");
 		w.append("\n");
 		printRow(myPrintingKeySV_SYSOUT,w.toString());
 		w=null;
